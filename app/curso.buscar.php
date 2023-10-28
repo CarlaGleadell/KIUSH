@@ -1,8 +1,10 @@
 <?php
 include_once '../lib/ControlAcceso.Class.php';
 ControlAcceso::requierePermiso(PermisosSistema::PERMISO_USUARIOS);
-include_once '../modelo/ColeccionUsuarios.php';
-$ColeccionUsuarios = new ColeccionUsuarios();
+include_once '../modelo/ColeccionCursos.php';
+$ColeccionCursos = new ColeccionCursos();
+$valorBusqueda= $_GET['busquedaCurso'];
+$valor='0';
 ?>
 
 <html>
@@ -12,7 +14,7 @@ $ColeccionUsuarios = new ColeccionUsuarios();
         <link rel="stylesheet" href="../lib/open-iconic-master/font/css/open-iconic-bootstrap.css" />
         <script type="text/javascript" src="../lib/JQuery/jquery-3.3.1.js"></script>
         <script type="text/javascript" src="../lib/bootstrap-4.1.1-dist/js/bootstrap.min.js"></script>        
-        <title><?= Constantes::NOMBRE_SISTEMA; ?> - Usuarios</title>
+        <title><?= Constantes::NOMBRE_SISTEMA; ?> - Cursos</title>
     </head>
     <body>
 
@@ -22,67 +24,54 @@ $ColeccionUsuarios = new ColeccionUsuarios();
 
             <div class="card">
                 <div class="card-header">
-                    <h3>Usuarios</h3>
+                    <h3>Cursos</h3>
                 </div>
-<<<<<<< HEAD
                 <div class="card-body">
                     <p>
-                        <a href="usuario.crear.php">
+                        <a href="curso.crear.php">
                         <button type="button" class="btn btn-success">
-                            <span class="oi oi-plus"></span> Nuevo Usuario
+                            <span class="oi oi-plus"></span> Nuevo Curso
                         </button>
                     </a>
-                    </p>
-=======
-                
-                <div class="card-body">
-                    <p>
-                        <a href="usuario.crear.php">
-                            <button type="button" class="btn btn-success">
-                                <span class="oi oi-plus"></span> Nuevo Usuario
-                            </button>
-                        </a>
-                    </p>
-                    
-                    
-
-                    <form class="d-flex" action="usuario.buscar.php" method="get">
-                        <input name ="busquedaUsuario" id="campoBusqueda" class="form-control me-2" type="search" placeholder="Buscar usuario" aria-label="Buscar">
-                        <button class="btn btn-outline-success" type="submit">Buscar</button>
+                    <form class="d-flex" action="curso.buscar.php" method="get">
+                        <input name="busquedaCurso" class="form-control me-2 flex-grow-1" type="search" placeholder="Buscar curso" aria-label="Buscar">
+                        <button  class="btn btn-outline-success" type="submit">Buscar</button>
                     </form>
+                    </p>
 
-
->>>>>>> 010b2d3 (version mostrada el martes 24 octubre)
                     <table class="table table-hover table-sm">
                         <tr class="table-info">
-                            <th>Usuario</th>
+                            <th>Cursos Cargados</th>
                             <th>Opciones</th>
                         </tr>
                         <tr>
-                            <?php foreach ($ColeccionUsuarios->getUsuarios() as $Usuario) {
-                                ?>
-                                <td><?= $Usuario->getNombre(); ?><br /><?= $Usuario->getEmail(); ?></td>
-                                <td>
-                                    <a title="Ver detalle" href="usuario.ver.php?id=<?= $Usuario->getId(); ?>">
+                            <?php foreach ($ColeccionCursos->getCursos() as $Curso) {
+                                 if(stripos(strtolower($Curso->getNombre()), $valorBusqueda) !== false){$valor=1?>
+                                <td style="width: 80%"><?= $Curso->getNombre(); ?><br /><?= $Curso->getDescripcion(); ?></td>
+                                <td  style="width: 20%">
+                                    <a title="Ver detalle" href="curso.ver.php?id=<?= $Curso->getId(); ?>">
                                         <button type="button" class="btn btn-outline-info">
                                             <span class="oi oi-zoom-in"></span>
                                         </button></a>
-                                    <a title="Modificar" href="usuario.modificar.php?id=<?= $Usuario->getId(); ?>">
+                                    <a title="Modificar" href="curso.modificar.php?id=<?= $Curso->getId(); ?>">
                                         <button type="button" class="btn btn-outline-warning">
                                             <span class="oi oi-pencil"></span>
                                         </button></a>
-                                    <a title="Eliminar" href="usuario.eliminar.php?id=<?= $Usuario->getId(); ?>">
+                                    <a title="Eliminar" href="curso.eliminar.php?id=<?= $Curso->getId(); ?>">
                                         <button type="button" class="btn btn-outline-danger">
                                             <span class="oi oi-trash"></span>
                                         </button></a>
                                 </td>
                             </tr>
-                        <?php } ?>
+                        <?php } 
+                        }?>
                     </table>
                 </div>
+                <div><?php if($valor=='0') {echo '<h5 align="center" style="color:gray;">No se encontraron cursos con ese nombre</h5>';}?></div>
             </div>
         </div>
         <?php include_once '../gui/footer.php'; ?>
     </body>
 </html>
+
 

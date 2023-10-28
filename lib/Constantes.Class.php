@@ -24,7 +24,12 @@ class Constantes {
     const HOMEAUTH = "http://localhost/uargflow/app/usuarios.php";
     const HOMEURL2 = "http://localhost/uargflow/app/index_2.php";
     
+<<<<<<< HEAD
     const BD_SCHEMA = "bdusuarios";
     const BD_USERS = "bdusuarios";
+=======
+    const BD_SCHEMA = "bdkiush";
+    const BD_USERS = "bdkiush";
+>>>>>>> 010b2d3 (version mostrada el martes 24 octubre)
     
 }

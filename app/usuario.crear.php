@@ -29,8 +29,13 @@ $Roles = new ColeccionRoles();
                     <div class="card-body">
                         <h4>Propiedades</h4>
                         <div class="form-group">
+<<<<<<< HEAD
                             <label for="inputNombre">Nombre</label>
                             <input type="text" name="nombre" class="form-control" id="inputNombre" placeholder="Ingrese el nombre del Usuario" required="">
+=======
+                            <label for="inputNombre">Nombre y apellido</label>
+                            <input type="text" name="nombre" class="form-control" id="inputNombre" placeholder="Ingrese el nombre y apellido completo" required="">
+>>>>>>> 010b2d3 (version mostrada el martes 24 octubre)
                         </div>
                         <div class="form-group">
                             <label for="inputMail">Email</label>

@@ -144,7 +144,14 @@ class UsuarioSesion {
         
         if (!$this->id){
             try {
+<<<<<<< HEAD
                 $this->registrarUsuario();
+=======
+                //$this->registrarUsuario();
+                echo "<script> alert('No Tienes permiso. Comunicate con Extension')
+                      window.location= '../index.php'
+                    </script>";
+>>>>>>> 010b2d3 (version mostrada el martes 24 octubre)
             } catch (Exception $ex) {
                 throw new Exception($ex->getMessage(), $ex->getCode());
             }
@@ -362,8 +369,34 @@ class ControlAcceso {
      * 
      */
     function redireccionaIndex() {
+<<<<<<< HEAD
         $this->ubicacion = Constantes::HOMEURL2;
         header("Location: {$this->ubicacion}");
+=======
+        //$this->ubicacion = Constantes::HOMEAUTH;
+        //header("Location: {$this->ubicacion}");
+        
+        $usuario=$_SESSION['usuario']->nombre;
+        $consulta="SELECT rol.nombre FROM `usuario_rol` "
+              . "INNER JOIN usuario ON (usuario_rol.id_usuario=usuario.id) "
+              . "INNER JOIN rol ON (usuario_rol.id_rol=rol.id) "
+              . "WHERE usuario.nombre='$usuario'";
+        
+        $this->datos=BDConexion::getInstancia()->query($consulta);
+        foreach ($this->datos as $v){
+            
+           //Se hace uso de un switch para asignar a cada Usuario su espacio de trabajo.
+           switch ($v['nombre']){
+               case "Usuario Comun":
+                   header("Location: ../app/mensaje.php");
+                   break;
+               case "Administrador":
+                   header("Location: ../app/index_2.php");
+                   break;
+           }
+       }
+         
+>>>>>>> 010b2d3 (version mostrada el martes 24 octubre)
     }
 
 }

@@ -72,7 +72,11 @@ BDConexion::getInstancia()->autocommit(true);
                     <h5 class="card-text">Opciones</h5>
                     <a href="usuarios.php">
                         <button type="button" class="btn btn-primary">
+<<<<<<< HEAD
                             <span class="oi oi-account-logout"></span> Salir
+=======
+                            <span class="oi oi-account-logout"></span> Atrás
+>>>>>>> 010b2d3 (version mostrada el martes 24 octubre)
                         </button>
                     </a>
                 </div>

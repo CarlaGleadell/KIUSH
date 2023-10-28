@@ -6,12 +6,32 @@ $DatosFormulario = $_POST;
 BDConexion::getInstancia()->autocommit(false);
 BDConexion::getInstancia()->begin_transaction();
 
+<<<<<<< HEAD
 $query = "INSERT INTO Cursos "
         . "VALUES ( '{ [id]},
         '{$DatosFormulario["nombre"]}',
         '{$DatosFormulario["descripcion"]}',
         '{$DatosFormulario["email"]}
         ')";
+=======
+/*
+Al insertar en la base de datos se debe insertar
+estado :  va a depender de fechaIncioInscripcion y fechaFinInscripcion
+id_usuario : debe obtenerse del usuario que tiene la sesion iniciada en el momento
+FALTA REALIZAR ESO
+PROVISORIAMENTE SE ENVIA 0 Y 2
+*/
+
+
+$query = "INSERT INTO curso "
+        . "VALUES ( null,
+        '{$DatosFormulario["nombre"]}',
+        '{$DatosFormulario["descripcion"]}',
+        '{$DatosFormulario["fechasDictado"]}',
+        '{$DatosFormulario["fechaInicioInscripcion"]}',
+        '{$DatosFormulario["fechaFinInscripcion"]}',
+        '{$DatosFormulario["lugar"]}', '0','2')";
+>>>>>>> 010b2d3 (version mostrada el martes 24 octubre)
 $consulta = BDConexion::getInstancia()->query($query);
 
 if (!$consulta) {
@@ -19,6 +39,7 @@ if (!$consulta) {
     //arrojar una excepcion
     die(BDConexion::getInstancia()->errno);
 }
+<<<<<<< HEAD
 /*$idUsuario = BDConexion::getInstancia()->insert_id;
 foreach ($DatosFormulario["rol"] as $idRol) {
     $query = "INSERT INTO usuario_rol "
@@ -30,6 +51,9 @@ foreach ($DatosFormulario["rol"] as $idRol) {
         die(BDConexion::getInstancia()->errno);
     }
 }*/
+=======
+
+>>>>>>> 010b2d3 (version mostrada el martes 24 octubre)
 BDConexion::getInstancia()->commit();
 BDConexion::getInstancia()->autocommit(true);
 ?>
@@ -66,7 +90,11 @@ BDConexion::getInstancia()->autocommit(true);
                     <h5 class="card-text">Opciones</h5>
                     <a href="index_2.php">
                         <button type="button" class="btn btn-primary">
+<<<<<<< HEAD
                             <span class="oi oi-account-logout"></span> Volver Menu
+=======
+                            <span class="oi oi-account-logout"></span> Volver al Menú
+>>>>>>> 010b2d3 (version mostrada el martes 24 octubre)
                         </button>
                     </a>
                 </div>

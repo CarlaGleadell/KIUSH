@@ -3,6 +3,8 @@ include_once '../lib/ControlAcceso.Class.php';
 ControlAcceso::requierePermiso(PermisosSistema::PERMISO_USUARIOS);
 include_once '../modelo/ColeccionUsuarios.php';
 $ColeccionUsuarios = new ColeccionUsuarios();
+$valorBusqueda= $_GET['busquedaUsuario'];
+$valor='0';
 ?>
 
 <html>
@@ -24,16 +26,6 @@ $ColeccionUsuarios = new ColeccionUsuarios();
                 <div class="card-header">
                     <h3>Usuarios</h3>
                 </div>
-<<<<<<< HEAD
-                <div class="card-body">
-                    <p>
-                        <a href="usuario.crear.php">
-                        <button type="button" class="btn btn-success">
-                            <span class="oi oi-plus"></span> Nuevo Usuario
-                        </button>
-                    </a>
-                    </p>
-=======
                 
                 <div class="card-body">
                     <p>
@@ -44,15 +36,13 @@ $ColeccionUsuarios = new ColeccionUsuarios();
                         </a>
                     </p>
                     
-                    
 
                     <form class="d-flex" action="usuario.buscar.php" method="get">
-                        <input name ="busquedaUsuario" id="campoBusqueda" class="form-control me-2" type="search" placeholder="Buscar usuario" aria-label="Buscar">
+                        <input name ="busquedaUsuario" id="campoBusqueda" class="form-control me-2" type="search" placeholder="Buscar por nombre y apellido completo" aria-label="Buscar">
                         <button class="btn btn-outline-success" type="submit">Buscar</button>
                     </form>
 
 
->>>>>>> 010b2d3 (version mostrada el martes 24 octubre)
                     <table class="table table-hover table-sm">
                         <tr class="table-info">
                             <th>Usuario</th>
@@ -60,25 +50,30 @@ $ColeccionUsuarios = new ColeccionUsuarios();
                         </tr>
                         <tr>
                             <?php foreach ($ColeccionUsuarios->getUsuarios() as $Usuario) {
-                                ?>
+                                if(stripos(strtolower($Usuario->getNombre()), $valorBusqueda) !== false){$valor=1?>
                                 <td><?= $Usuario->getNombre(); ?><br /><?= $Usuario->getEmail(); ?></td>
                                 <td>
                                     <a title="Ver detalle" href="usuario.ver.php?id=<?= $Usuario->getId(); ?>">
                                         <button type="button" class="btn btn-outline-info">
                                             <span class="oi oi-zoom-in"></span>
-                                        </button></a>
+                                        </button>
+                                    </a>
                                     <a title="Modificar" href="usuario.modificar.php?id=<?= $Usuario->getId(); ?>">
                                         <button type="button" class="btn btn-outline-warning">
                                             <span class="oi oi-pencil"></span>
-                                        </button></a>
+                                        </button>
+                                    </a>
                                     <a title="Eliminar" href="usuario.eliminar.php?id=<?= $Usuario->getId(); ?>">
                                         <button type="button" class="btn btn-outline-danger">
                                             <span class="oi oi-trash"></span>
-                                        </button></a>
+                                        </button>
+                                    </a>
                                 </td>
-                            </tr>
-                        <?php } ?>
+                                </tr>
+                            <?php }
+                            }?>
                     </table>
+                    <div><?php if($valor=='0') {echo '<h5 align="center" style="color:gray;">No se encontraron usuarios con ese nombre</h5>';}?></div>
                 </div>
             </div>
         </div>
