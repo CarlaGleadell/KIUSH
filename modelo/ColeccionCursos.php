@@ -1,27 +1,27 @@
 <?php
 include_once 'BDColeccionGenerica.Class.php';
-include_once 'Usuario.Class.php';
+include_once 'Cursos.Class.php';
 
-class ColeccionUsuarios extends BDColeccionGenerica{
+class ColeccionCursos extends BDColeccionGenerica{
     
     /**
      *
-     * @var Usuario[]
+     * @var Curso[]
      */
-    private $usuarios;
+    private $curso;
        
     function __construct() {
         parent::__construct();
-        $this->setColeccion("usuario","Usuario");
-        $this->usuarios = $this->coleccion;
+        $this->setColeccion("curso","Curso");
+        $this->curso = $this->coleccion;
     }
     
      /**
      * 
      * @return array()
      */
-    function getUsuarios() {
-        return $this->usuarios;
+    function getCursos() {
+        return $this->curso;
     }
 }
 

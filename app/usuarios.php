@@ -24,14 +24,24 @@ $ColeccionUsuarios = new ColeccionUsuarios();
                 <div class="card-header">
                     <h3>Usuarios</h3>
                 </div>
+                
                 <div class="card-body">
                     <p>
                         <a href="usuario.crear.php">
-                        <button type="button" class="btn btn-success">
-                            <span class="oi oi-plus"></span> Nuevo Usuario
-                        </button>
-                    </a>
+                            <button type="button" class="btn btn-success">
+                                <span class="oi oi-plus"></span> Nuevo Usuario
+                            </button>
+                        </a>
                     </p>
+                    
+                    
+
+                    <form class="d-flex" action="usuario.buscar.php" method="get">
+                        <input name ="busquedaUsuario" id="campoBusqueda" class="form-control me-2" type="search" placeholder="Buscar usuario por su nombre" aria-label="Buscar">
+                        <button class="btn btn-outline-success" type="submit">Buscar</button>
+                    </form>
+
+
                     <table class="table table-hover table-sm">
                         <tr class="table-info">
                             <th>Usuario</th>

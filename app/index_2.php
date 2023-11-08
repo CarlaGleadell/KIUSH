@@ -1,4 +1,10 @@
-<?php include_once '../lib/ControlAcceso.Class.php'; ?>
+<?php include_once '../lib/ControlAcceso.Class.php'; 
+include_once '../modelo/ColeccionCursos.php';
+include_once '../modelo/ColeccionIntegrantes.php';
+$ColeccionCursos = new ColeccionCursos();
+$ColeccionIntegrantes = new ColeccionIntegrantes();
+
+?>
 <html>
     <head>
         <meta charset="UTF-8">
@@ -10,71 +16,51 @@
     </head>
     <body>
 
-        <?php include_once '../gui/navbar_2.php'; ?>
-
+        <?php include_once '../gui/navbar.php'; ?>
+        
         <div class="container">
-
-            <div class="card">
-                <div class="card-header">
-                    <h3>Bienvenido al Sistema De Gestion de Inscripciones de Cursos de Extension- KIUSH</h3>
+        
+            <div class="card-header">
+                    <h3>Sistemas de inscripción a cursos </h3>
                     
-                </div>
-                <div class="card-header">
-                    <h3>Bienvenido al Sistema De Gestion de Inscripciones de Cursos de Extension- KIUSH</h3>
-                    
-                </div>
-
-                <div class="card-body">
-                    <a class="navbar-brand" href="https://www.uarg.unpa.edu.ar/index.php/component/jevents/eventodetalle/1175/19/curso-carpinteria-avanzada-para-adultos?Itemid=164">
-                        <img src="../lib/img/Curso_1.png" width="300" height="100" class="d-inline-block align-top" alt="">
-                    </a>
-                    <a class="navbar-brand" href="curso.inscripcion.php">
-                        <img src="../lib/img/Curso_2.png" width="300" height="100" class="d-inline-block align-top" alt="">
-                    </a>
-                    <a class="navbar-brand" href="">
-                        <img src="../lib/img/Curso_3.png" width="300" height="100" class="d-inline-block align-top" alt="">
-                    </a>
-                    <a class="navbar-brand" href="">
-                        <img src="../lib/img/Curso_4.png" width="300" height="100" class="d-inline-block align-top" alt="">
-                    </a>
-                </div>
-
-                
-                <div class="aside">
-                    <p>
-                        <a href="usuarios.php">
-                        <button type="button" class="btn btn-success">
-                            <span class="oi oi-plus"></span> Administracion de Usuarios
-                        </button>
-                    </a>
-                    </p>
-                    <p>
-                        <a href="curso.crear.php">
-                        <button type="button" class="btn btn-success"></button>
-                        <button type="button" class="btn btn-success">
-                            <span class="oi oi-plus"></span> Agregar un Nuevo Curso
-                        </button>
-                    </a>
-                    </p>
-                    <p>
-                        <a href="curso.crear.php">
-                        <button type="button" class="btn btn-success"></button>
-                        <button type="button" class="btn btn-success">
-                            <span class="oi oi-plus"></span> Buscar
-                        </button>
-                    </a>
-                    </p>
-                    <table class="table table-hover table-sm">
-                        <tr class="table-info">
-                            <th>Usuario</th>
-                            <th>Opciones</th>
-                        </tr>
-                        <tr>
-                        </tr>
-                    </table>
+            </div>
+            
+            
+                            
+            <div class="container">
+                <div class="row">
+                <?php foreach ($ColeccionCursos->getCursos() as $Curso) {
+                $imagen = '../lib/img/'. $Curso->getImagen();
+                ?>
+                    <div class="col-md-4" style="margin-bottom: 30px;">
+                        <div class="card" style="margin: 15px; display: flex; flex-direction: column; height: 100%;">
+                        <a style="text-decoration: none; color: inherit;">
+                            <img src='<?php echo $imagen ?>' style="width:100%; height: 120px; object-fit:cover" class="card-img-top">
+                            <div class="card-body"style="flex: 1; overflow: auto;">
+                                <h5 class="card-title" style="height: 3em; overflow: hidden;"><?php echo $Curso->getNombre(); ?></h5>
+                                
+                                <p class="card-text" >Dictantes</p>
+                                <?php
+                                $integrantesDelCurso = $ColeccionIntegrantes->getIntegrantesPorCurso($Curso->getId());
+                                foreach ($integrantesDelCurso as $Integrante) { ?>
+                                    <span class="badge bg-primary"><?php echo $Integrante->getNombres() . " " . $Integrante->getApellidos();?></span>
+                                <?php } ?>
+                                
+                                
+                                <p class="card-text" style="height: 3em; overflow: hidden;"><?php echo $Curso->getFechasDictado(); ?></p>
+                                <div style="display: flex;">
+                                    <button type="button" class="btn btn-outline-success" onclick="window.location.href='curso.modificar.php?id=<?= $Curso->getId(); ?>'" style="margin-right: 10px;">Editar</button>
+                                    <button type="button" class="btn btn-outline-primary" onclick="window.location.href='persona.crear.php?id=<?= $Curso->getId(); ?>'">Inscribirse</button>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    </div>  
+                    <?php } ?>             
                 </div>
             </div>
-             
+           
+
         </div>
         <?php include_once '../gui/footer.php'; ?>
     </body>

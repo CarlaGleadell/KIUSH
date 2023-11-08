@@ -15,7 +15,7 @@ if (!$consulta) {
     die(BDConexion::getInstancia()->errno);
 }
 $idUsuario = BDConexion::getInstancia()->insert_id;
-foreach ($DatosFormulario["rol"] as $idRol) {
+$idRol=$DatosFormulario["rol"];
     $query = "INSERT INTO usuario_rol "
             . "VALUES ({$idUsuario}, {$idRol})";
     $consulta = BDConexion::getInstancia()->query($query);
@@ -24,7 +24,7 @@ foreach ($DatosFormulario["rol"] as $idRol) {
         //arrojar una excepcion
         die(BDConexion::getInstancia()->errno);
     }
-}
+
 BDConexion::getInstancia()->commit();
 BDConexion::getInstancia()->autocommit(true);
 ?>
@@ -61,7 +61,7 @@ BDConexion::getInstancia()->autocommit(true);
                     <h5 class="card-text">Opciones</h5>
                     <a href="usuarios.php">
                         <button type="button" class="btn btn-primary">
-                            <span class="oi oi-account-logout"></span> Salir
+                            <span class="oi oi-account-logout"></span> Atras
                         </button>
                     </a>
                 </div>

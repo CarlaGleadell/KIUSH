@@ -29,8 +29,8 @@ $Roles = new ColeccionRoles();
                     <div class="card-body">
                         <h4>Propiedades</h4>
                         <div class="form-group">
-                            <label for="inputNombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control" id="inputNombre" placeholder="Ingrese el nombre del Usuario" required="">
+                            <label for="inputNombre">Nombre y apellido</label>
+                            <input type="text" name="nombre" class="form-control" id="inputNombre" placeholder="Ingrese el nombre y apellido completo" required="">
                         </div>
                         <div class="form-group">
                             <label for="inputMail">Email</label>
@@ -38,9 +38,11 @@ $Roles = new ColeccionRoles();
                         </div>
                         <hr />
                         <h4>Roles</h4>
+
+                        
                         <?php foreach ($Roles->getRoles() as $Rol) { ?>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="<?= $Rol->getId(); ?>" id="rol[<?= $Rol->getId(); ?>]" name="rol[<?= $Rol->getId(); ?>]" />
+                                <input class="form-check-input" type="radio" value="<?= $Rol->getId(); ?>" id="rol[<?= $Rol->getId(); ?>]" name="rol" required />
                                 <label class="form-check-label" for="rol">
                                     <?= $Rol->getNombre(); ?>
                                 </label>
