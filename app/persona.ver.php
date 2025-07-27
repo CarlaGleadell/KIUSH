@@ -71,8 +71,8 @@ $Persona = new Persona($_GET["id"]);
                         case 4:
                             $tipoNombre = 'Externo a la UNPA-UARG';
                             break;
-                        case 4:
-                            $tipoNombre = 'Graduado/a/e de la UNPA-UARG';
+                        case 5:
+                            $tipoNombre = 'Graduado de la UNPA-UARG';
                             break;
                     }
                     ?>  

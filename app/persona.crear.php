@@ -76,7 +76,7 @@ $curso = new Curso($idCurso);
                                 <option value="2">Docente de la UNPA-UARG</option>
                                 <option value="3">No docente de la UNPA-UARG</option>
                                 <option value="4">Externo a la UNPA-UARG</option>
-                                <option value="5">Graduado/a/e de la UNPA-UARG</option>
+                                <option value="5">Graduado de la UNPA-UARG</option>
                             </select>
                             <div id="divCarrera">
                                 <label for="inputCarrera">Carrera</label>

@@ -78,6 +78,7 @@ $carrera = $Persona->getCarrera_Cod();
                                 <option value="2" <?php if ($tipo == 2) echo 'selected'; ?>>Docente de la UNPA-UARG</option>
                                 <option value="3" <?php if ($tipo == 3) echo 'selected'; ?>>No docente de la UNPA-UARG</option>
                                 <option value="4" <?php if ($tipo == 4) echo 'selected'; ?>>Externo a la UNPA-UARG</option>
+                                <option value="5" <?php if ($tipo == 5) echo 'selected'; ?>>Graduado de la UNPA-UARG</option>
                             </select>
                             <div id="divCarrera">
                                 <label for="inputCarrera">Carrera</label>
