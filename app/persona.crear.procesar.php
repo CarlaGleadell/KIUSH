@@ -25,94 +25,37 @@ if (isset($_POST['estado'])) {
 }
 
 try {
+    $dni = $DatosFormulario["dni"];
+    $nombre = $DatosFormulario["nombre"];
+    $apellido = $DatosFormulario["apellido"];
+    $email = $DatosFormulario["email"];
+    $tipo_id = intval($DatosFormulario["tipo"]);
+    $carrera_Cod = !empty($DatosFormulario["carrera"]) ? sprintf("%03d", intval($DatosFormulario["carrera"])) : null;
+
     $checkQuery = "SELECT id FROM persona WHERE dni = ?";
     $stmt = BDConexion::getInstancia()->prepare($checkQuery);
-    $stmt->bind_param("s", $DatosFormulario["dni"]);
+    $stmt->bind_param("s", $dni);
     $stmt->execute();
     $result = $stmt->get_result();
-    $tipo_id = intval($DatosFormulario["tipo"]);
-    $carrera_Cod = !empty($DatosFormulario["carrera"]) ? 
-                  sprintf("%03d", intval($DatosFormulario["carrera"])) : 
-                  null;
-    
+
     if ($result->num_rows > 0) {
+        // Si la persona ya existe, solo se actualizar
         $row = $result->fetch_assoc();
         $idPersona = $row['id'];
-        
-        if (empty($carrera_Cod)) {
-            $updateQuery = "UPDATE persona SET 
-                nombre = ?,
-                apellido = ?,
-                email = ?,
-                tipo_id = ?
-                WHERE id = ?";
-                
-            $stmt = BDConexion::getInstancia()->prepare($updateQuery);
-            $stmt->bind_param("sssii", 
-                $DatosFormulario["nombre"],
-                $DatosFormulario["apellido"],
-                $DatosFormulario["email"],
-                $tipo_id,
-                $idPersona
-            );
-        } else {
-            $updateQuery = "UPDATE persona SET 
-                nombre = ?,
-                apellido = ?,
-                email = ?,
-                tipo_id = ?,
-                carrera_Cod = ?
-                WHERE id = ?";
-                
-            $stmt = BDConexion::getInstancia()->prepare($updateQuery);
-            $stmt->bind_param("sssisi", 
-                $DatosFormulario["nombre"],
-                $DatosFormulario["apellido"],
-                $DatosFormulario["email"],
-                $tipo_id,
-                $carrera_Cod,
-                $idPersona
-            );
-        }
-        
-        if (!$stmt->execute()) {
-            throw new Exception(BDConexion::getInstancia()->error);
-        }
+
+        $updateQuery = "UPDATE persona SET nombre = ?, apellido = ?, email = ?, tipo_id = ?, carrera_Cod = ? WHERE id = ?";
+        $stmt = BDConexion::getInstancia()->prepare($updateQuery);
+        $stmt->bind_param("sssisi", $nombre, $apellido, $email, $tipo_id, $carrera_Cod, $idPersona);
+        $stmt->execute();
     } else {
-        if (empty($carrera_Cod)) {
-            $insertQuery = "INSERT INTO persona 
-                (id, nombre, apellido, email, dni, tipo_id) 
-                VALUES (null, ?, ?, ?, ?, ?)";
-                
-            $stmt = BDConexion::getInstancia()->prepare($insertQuery);
-            $stmt->bind_param("ssssi",
-                $DatosFormulario["nombre"],
-                $DatosFormulario["apellido"],
-                $DatosFormulario["email"],
-                $DatosFormulario["dni"],
-                $tipo_id
-            );
-        } else {
-            $insertQuery = "INSERT INTO persona 
-                (id, nombre, apellido, email, dni, tipo_id, carrera_Cod) 
-                VALUES (null, ?, ?, ?, ?, ?, ?)";
-                
-            $stmt = BDConexion::getInstancia()->prepare($insertQuery);
-            $stmt->bind_param("ssssii",
-                $DatosFormulario["nombre"],
-                $DatosFormulario["apellido"],
-                $DatosFormulario["email"],
-                $DatosFormulario["dni"],
-                $tipo_id,
-                $carrera_Cod
-            );
-        }
-        
-        if (!$stmt->execute()) {
-            throw new Exception(BDConexion::getInstancia()->error);
-        }
+        // Si la persona no existe, se crea una nueva
+        $insertQuery = "INSERT INTO persona (nombre, apellido, email, dni, tipo_id, carrera_Cod) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = BDConexion::getInstancia()->prepare($insertQuery);
+        $stmt->bind_param("ssssii", $nombre, $apellido, $email, $dni, $tipo_id, $carrera_Cod);
+        $stmt->execute();
         $idPersona = BDConexion::getInstancia()->insert_id;
     }
+
 
     $mail = new PHPMailer(true);
 
