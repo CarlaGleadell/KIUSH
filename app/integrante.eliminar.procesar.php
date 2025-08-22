@@ -65,7 +65,7 @@ BDConexion::getInstancia()->autocommit(true);
                     <?php } ?>
                     <hr />
                     <h5 class="card-text">Opciones</h5>
-                    <a href="integrantes.php">
+                    <a href="integrantes.gestionar.php">
                         <button type="button" class="btn btn-primary">
                             <span class="oi oi-account-logout"></span> Atras
                         </button>

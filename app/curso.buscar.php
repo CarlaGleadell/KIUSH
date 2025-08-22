@@ -68,10 +68,23 @@ $valor='0';
                     </table>
                 </div>
                 <div><?php if($valor=='0') {echo '<h5 align="center" style="color:gray;">No se encontraron cursos con ese nombre</h5>';}?></div>
+            
+                <div class="mt-3" id="fin-lista">
+                    <a href="cursos.php" class="btn btn-outline-secondary text-center">
+                        <span class="oi oi-arrow-left"></span> Volver a la lista completa de cursos
+                    </a>
+                </div>
+
             </div>
         </div>
         <?php include_once '../gui/footer.php'; ?>
+    
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var end = document.getElementById('fin-lista');
+    if (end) { end.scrollIntoView({ behavior: 'smooth', block: 'end' }); }
+});
+</script>
+
     </body>
 </html>
-
-

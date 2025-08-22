@@ -78,5 +78,61 @@ $Cursos = new ColeccionCursos();
             </form>
         </div>
         <?php include_once '../gui/footer.php'; ?>
+        <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            var nombre = document.getElementById('inputNombre').value.trim();
+            var descripcion = document.getElementById('inputDescripcion').value.trim();
+            var fechasDictado = document.getElementById('inputFechasDictado').value.trim();
+            var lugar = document.getElementById('inputLugar').value.trim();
+
+            // Validación: mínimo 2 letras en cada campo
+            function tieneMinimoDosLetras(texto) {
+                return (texto.match(/[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]/g) || []).length >= 2;
+            }
+
+            if (!tieneMinimoDosLetras(nombre)) {
+                alert('El nombre del curso debe tener al menos 2 letras.');
+                e.preventDefault();
+                return;
+            }
+            if (!tieneMinimoDosLetras(descripcion)) {
+                alert('La descripción del curso debe tener al menos 2 letras.');
+                e.preventDefault();
+                return;
+            }
+            if (!tieneMinimoDosLetras(fechasDictado)) {
+                alert('Los días y horarios deben tener al menos 2 letras.');
+                e.preventDefault();
+                return;
+            }
+            if (!tieneMinimoDosLetras(lugar)) {
+                alert('El espacio de dictado debe tener al menos 2 letras.');
+                e.preventDefault();
+                return;
+            }
+
+            // Validación: no permitir solo números
+            if (/^\d+$/.test(nombre)) {
+                alert('El nombre del curso no puede ser únicamente números. Ingrese un nombre real, ya que se mostrará en el inicio del curso.');
+                e.preventDefault();
+                return;
+            }
+            if (/^\d+$/.test(descripcion)) {
+                alert('La descripción del curso no puede ser únicamente números. Ingrese una descripción real.');
+                e.preventDefault();
+                return;
+            }
+            if (/^\d+$/.test(fechasDictado)) {
+                alert('Los días y horarios no pueden ser únicamente números. Ingrese información real.');
+                e.preventDefault();
+                return;
+            }
+            if (/^\d+$/.test(lugar)) {
+               alert('El espacio de dictado no puede ser únicamente números. Ingrese un nombre real del lugar.');
+                e.preventDefault();
+                return;
+        }
+        });
+        </script>
     </body>
 </html>

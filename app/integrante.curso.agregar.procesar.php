@@ -8,7 +8,10 @@ $idCurso = $_GET["id_curso"];
 $consulta = false;
 $error = null;
 $yaExiste = false;
-
+if (!$yaExiste) {
+    header("Location: integrante.curso.datos.php?id_integrante={$idIntegrante}&id_curso={$idCurso}");
+    exit;
+}
 $queryVerificar = "SELECT * FROM curso_integrante WHERE curso_id = '{$idCurso}' AND integrante_id = '{$idIntegrante}'";
 $resultadoVerificar = BDConexion::getInstancia()->query($queryVerificar);
 $yaExiste = $resultadoVerificar->num_rows > 0;

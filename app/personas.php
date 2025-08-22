@@ -24,15 +24,7 @@ $idCurso = isset($_GET['id']) ? $_GET['id'] : null;
                     <h3>Preinscriptos</h3>
                 </div>
                 <div class="card-body">
-                <p>
-                    <a href="persona.crear.php?id=<?= $idCurso; ?>">
-                        <button type="button" class="btn btn-success">
-                            <span class="oi oi-plus"></span> Nueva Persona
-                        </button>
-                    </a>
-                </p>
-                
-                
+              
                 <form class="d-flex"  action="persona.buscar.php" method="get">
                     <input name="busquedaPersona" class="form-control me-2 flex-grow-1" type="search" placeholder="Buscar preinscripto" aria-label="Buscar">
                     <button class="btn btn-outline-success" type="submit">Buscar</button>
@@ -59,16 +51,6 @@ $idCurso = isset($_GET['id']) ? $_GET['id'] : null;
                                 <a title="Ver detalle" href="persona.ver.php?id=<?= $Persona->getId(); ?>">
                                     <button type="button" class="btn btn-outline-info">
                                         <span class="oi oi-zoom-in"></span>
-                                    </button>
-                                </a>
-                                <a title="Modificar" href="persona.modificar.php?id=<?= $Persona->getId(); ?>">
-                                    <button type="button" class="btn btn-outline-warning">
-                                        <span class="oi oi-pencil"></span>
-                                    </button>
-                                </a>
-                                <a title="Eliminar" href="persona.eliminar.php?id=<?= $Persona->getId(); ?>">
-                                    <button type="button" class="btn btn-outline-danger">
-                                        <span class="oi oi-trash"></span>
                                     </button>
                                 </a>
                                 <a title="Agregar" href="persona.curso.agregar.procesar.php?id_persona=<?= $Persona->getId(); ?>&id_curso=<?= $idCurso; ?>">

@@ -95,5 +95,34 @@ $imagen = '../lib/img/' . $Curso->getImagen();
             </form>
         </div>
         <?php include_once '../gui/footer.php'; ?>
+        <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            var nombre = document.getElementById('inputNombre').value.trim();
+            var fechasDictado = document.getElementById('inputFechasDictado').value.trim();
+            var lugar = document.getElementById('inputLugar').value.trim();
+            var caracteresInvalidos = /[\.\/\\:\*\?"<>\|]/;
+
+            if (caracteresInvalidos.test(nombre)) {
+                alert('El nombre del curso no puede contener caracteres especiales como . / \\ : * ? " < > |');
+                e.preventDefault();
+                return;
+            }
+            if (/^\d+$/.test(nombre)) {
+                alert('El nombre del curso no puede ser únicamente números. Ingrese un nombre real.');
+                e.preventDefault();
+                return;
+            }
+            if (/^\d+$/.test(fechasDictado)) {
+                alert('Los días y horarios no pueden ser únicamente números. Ingrese información real.');
+                e.preventDefault();
+                return;
+            }   
+            if (/^\d+$/.test(lugar)) {
+                alert('El espacio de dictado no puede ser únicamente números. Ingrese un nombre real del lugar.');
+                e.preventDefault();
+                return;
+            }
+        });
+        </script>
     </body>
 </html>

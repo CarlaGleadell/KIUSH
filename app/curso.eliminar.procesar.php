@@ -2,23 +2,24 @@
 include_once '../lib/ControlAcceso.Class.php';
 ControlAcceso::requierePermiso(PermisosSistema::PERMISO_CURSOS);
 include_once '../modelo/BDConexion.Class.php';
-$DatosFormulario = $_POST;
 
-BDConexion::getInstancia()->autocommit(false);
-BDConexion::getInstancia()->begin_transaction();
+$idCurso = isset($_GET['id']) ? $_GET['id'] : (isset($_POST['id']) ? $_POST['id'] : null);
 
-$query = "DELETE FROM curso "
-        . "WHERE id = {$DatosFormulario["id"]}";
-
-$consulta = BDConexion::getInstancia()->query($query);
-if (!$consulta) {
-    BDConexion::getInstancia()->rollback();
-    //arrojar una excepcion
-    die(BDConexion::getInstancia()->errno);
+if (!$idCurso) {
+    die('Error: No se recibió el ID del curso.');
 }
 
-BDConexion::getInstancia()->commit();
-BDConexion::getInstancia()->autocommit(true);
+// Elimina los registros relacionados en curso_integrante
+$queryIntegrantes = "DELETE FROM curso_integrante WHERE curso_id = {$idCurso}";
+$consultaIntegrantes = BDConexion::getInstancia()->query($queryIntegrantes);
+
+// Elimina los registros relacionados en curso_persona
+$queryPersonas = "DELETE FROM curso_persona WHERE curso_id = {$idCurso}";
+$consultaPersonas = BDConexion::getInstancia()->query($queryPersonas);
+
+// Elimina el curso
+$queryCurso = "DELETE FROM curso WHERE id = {$idCurso}";
+$consulta = BDConexion::getInstancia()->query($queryCurso);
 ?>
 <html>
     <head>
@@ -32,25 +33,23 @@ BDConexion::getInstancia()->autocommit(true);
     <body>
         <?php include_once '../gui/navbar.php'; ?>
         <div class="container">
-            <p></p>
-            <div class="card">
+            <div class="card mt-4">
                 <div class="card-header">
                     <h3>Eliminar Curso</h3>
                 </div>
                 <div class="card-body">
                     <?php if ($consulta) { ?>
                         <div class="alert alert-success" role="alert">
-                            Operaci&oacute;n realizada con &eacute;xito.
+                            Operación realizada con éxito.
                         </div>
-                    <?php } ?>   
-                    <?php if (!$consulta) { ?>
+                    <?php } else { ?>
                         <div class="alert alert-danger" role="alert">
                             Ha ocurrido un error.
                         </div>
                     <?php } ?>
                     <hr />
                     <h5 class="card-text">Opciones</h5>
-                     <a href="cursos.php">
+                    <a href="cursos.php">
                         <button type="button" class="btn btn-primary">
                             <span class="oi oi-account-logout"></span> Atrás
                         </button>

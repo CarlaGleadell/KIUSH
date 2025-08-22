@@ -31,90 +31,14 @@ $Integrantes = new ColeccionIntegrantes();
                         <h4>Datos</h4>
                         <div class="form-group">
                             <label for="inputNombre">Nombre/s</label>
-                            <input type="text" name="nombre" class="form-control" id="inputNombre" placeholder="Ingrese nombre/s" pattern="[A-Za-z0-9\s]+" required="">
+                            <input type="text" name="nombres" class="form-control" id="inputNombre" placeholder="Ingrese nombre/s" pattern="[A-Za-z0-9\s]+" required="">
                             <label for="inputApellido">Apellido/s</label>
-                            <input type="texte" name="apellido" class="form-control" id="inputApellido" placeholder="Ingrese apellido/s" pattern="[A-Za-z0-9\s]+" required="">
+                            <input type="text" name="apellidos" class="form-control" id="inputApellido" placeholder="Ingrese apellido/s" pattern="[A-Za-z0-9\s]+" required="">
                             <label for="inputDNI">DNI</label>
                             <input type="text" name="dni" class="form-control" id="inputDNI" placeholder="Ingrese DNI" pattern="\d{8}" maxlength="8" required="">
                             <label for="inputTitulo">Titulo de Grado y/o Posgrado</label>
                             <input type="text" name="titulo" class="form-control" id="inputTitulo" placeholder="Ingrese titulo de grado y/o posgrado" pattern="[A-Za-z0-9\s]+" required="">
-                            <label for="inputRol">Rol integrante</label>
-                            <select name="rol" class="form-control" id="inputRol" required="">
-                                <option value="">Seleccione el rol del integrante</option>
-                                <option value="1">Director</option>
-                                <option value="2">Co-Director</option>
-                                <option value="3">Integrante</option>
-                                <option value="4">Integrante Externo</option>
-                            </select>
-
-                            <!-- campos para director, codirector e integrantes -->
-                            <label for="inputInstituto">Instituto</label>
-                            <input type="text" name="instituto" class="form-control" id="inputInstituto" placeholder="Ingrese instituto" pattern="[A-Za-z0-9\s]+">
-                            <label for="inputCategoriaDocente">Categoría docente</label>
-                            <input type="text" name="categoriaDocente" class="form-control" id="inputCategoriaDocente" placeholder="Ingrese categoría docente" pattern="[A-Za-z0-9\s]+">
-                            <label for="inputDedicacion">Dedicación</label>
-                            <input type="text" name="dedicacion" class="form-control" id="inputDedicacion" placeholder="Ingrese dedicacion" pattern="[A-Za-z0-9\s]+">
-                            <label for="inputCategoriaExtensionista">Categoría Extensionista</label>
-                            <input type="text" name="categoriaExtensionista" class="form-control" id="inputCategoriaExtensionista" placeholder="Ingrese categoria extensionista" pattern="[A-Za-z0-9\s]+">
-                            <!-- campos para integrantes externos-->
-                            <label for="inputOrganizacion">Organización</label>
-                            <input type="text" name="organizacion" class="form-control" id="inputOrganizacion" placeholder="Ingrese organización" pattern="[A-Za-z0-9\s]+">
-                            <label for="inputFuncion">Función</label>
-                            <input type="text" name="funcion" class="form-control" id="inputFuncion" placeholder="Ingrese función" pattern="[A-Za-z0-9\s]+">
-                            <label for="inputNivelEstudios">Nivel de Estudios</label>
-                            <input type="text" name="nivelEstudios" class="form-control" id="inputNivelEstudios" placeholder="Ingrese nivel de estudios" pattern="[A-Za-z0-9\s]+">
-                            <label for="inputOcupacion">Ocupación</label>
-                            <input type="text" name="ocupacion" class="form-control" id="inputOcupacion" placeholder="Ingrese ocupación" pattern="[A-Za-z0-9\s]+">
                             
-
-                            <style>.hidden { display: none; }</style>
-                            <script>
-                            window.onload = function() {
-                                var rolSelect = document.getElementById('inputRol');
-                                var campos = ['inputInstituto', 'inputCategoriaDocente', 'inputDedicacion', 'inputCategoriaExtensionista'];
-                                var campos2 = ['inputOrganizacion','inputFuncion', 'inputNivelEstudios', 'inputOcupacion'];
-                                // Oculta los campos al cargar la página
-                                for (var i = 0; i < campos.length; i++) {
-                                    var campo = document.getElementById(campos[i]);
-                                    var label = document.querySelector('label[for="' + campos[i] + '"]');
-                                    campo.classList.add('hidden');
-                                    label.classList.add('hidden');
-                                    }
-                                for (var i = 0; i < campos2.length; i++) {
-                                    var campo = document.getElementById(campos2[i]);
-                                    var label = document.querySelector('label[for="' + campos2[i] + '"]');
-                                    campo.classList.add('hidden');
-                                    label.classList.add('hidden');
-                                }
-                                // Muestra u oculta los campos cuando se cambia el valor del select
-                                rolSelect.addEventListener('change', function() {
-                                    var rol = this.value;
-                                    for (var i = 0; i < campos.length; i++) {
-                                        var campo = document.getElementById(campos[i]);
-                                        var label = document.querySelector('label[for="' + campos[i] + '"]');
-                                        if (rol == '1' || rol == '2' || rol == '3') {
-                                            campo.classList.remove('hidden'); // Muestra el campo
-                                            label.classList.remove('hidden'); // Muestra la etiqueta
-                                        } else {
-                                            campo.classList.add('hidden'); // Oculta el campo
-                                            label.classList.add('hidden'); // Oculta la etiqueta
-                                            }
-                                    }
-                                    for (var i = 0; i < campos2.length; i++) {
-                                        var campo = document.getElementById(campos2[i]);
-                                        var label = document.querySelector('label[for="' + campos2[i] + '"]');
-                                        if (rol == '4') {
-                                            campo.classList.remove('hidden'); // Muestra el campo
-                                            label.classList.remove('hidden'); // Muestra la etiqueta
-                                            } else {
-                                            campo.classList.add('hidden'); // Oculta el campo
-                                            label.classList.add('hidden'); // Oculta la etiqueta
-                                        }
-                                    }
-                                });
-                            }
-                            </script>
-
                             <script>
                             function soloAlfanumerico(e) {
                                 const pattern = /^[a-zA-Z0-9\s]*$/;
@@ -187,12 +111,8 @@ $Integrantes = new ColeccionIntegrantes();
                             <input type="email" name="email" class="form-control" id="inputEmail" placeholder="Ingrese correo electronico" required="">
                              
 
-                            <label for="inputAfeccionHorasSemanales">Afección de horas semanales a la actividad</label>
-                            <input type="number" name="afeccionHorasSemanales" class="form-control" id="inputAfeccionHorasSemanales" min="0" placeholder="Ingrese afección de horas semanales a la actividad">
-                            <label for="inputAfeccionTotalHoras">Afección total de horas a la actividad</label>
-                            <input type="number" name="afeccionTotalHoras" class="form-control" id="inputAfeccionTotalHoras" min="0" placeholder="Ingrese afección total de horas a la actividad">
                             <label for="inputTipo">Tipo</label>
-                            <select name="tipo" class="form-control" id="inputTipo" >
+                            <select name="tipo_id" class="form-control" id="inputTipo" >
                                 <option value="">Seleccione el tipo de integrante</option>
                                 <option value="1">Estudiante de la UNPA-UARG</option>
                                 <option value="2">Docente de la UNPA-UARG</option>
@@ -244,5 +164,58 @@ $Integrantes = new ColeccionIntegrantes();
             </form>
         </div>
         <?php include_once '../gui/footer.php'; ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector('form').addEventListener('submit', function(e) {
+                    let tipo = document.getElementById('inputTipo').value;
+                    let carrera = document.getElementById('inputCarrera_Cod').value;
+
+                    // Si tipo es estudiante, docente o graduado, carrera es obligatoria
+                    if (tipo === '1' || tipo === '2' || tipo === '5') {
+                        if (carrera === '') {
+                            e.preventDefault();
+                            alert('Debe seleccionar una carrera para este tipo de integrante.');
+                            document.getElementById('inputCarrera_Cod').focus();
+                            return false;
+                        }
+                    }
+                    let campos = [
+                        {id: 'inputNombre', mensaje: 'El nombre debe ser como figura en el DNI', soloTexto: true},
+                        {id: 'inputApellido', mensaje: 'El apellido debe ser como figura en el DNI', soloTexto: true},
+                        {id: 'inputTitulo', mensaje: 'El título no deben ser solo numeros ni contener caracteres especiales', soloTexto: true},
+                        {id: 'inputDNI', mensaje: 'El DNI deben se 8 numero sin puntos ni espacios'},
+                        {id: 'inputDireccion_CodPostal', mensaje: 'El código postal es incorrecto'},
+                        {id: 'inputTelefono', mensaje: 'El teléfono debe ser un número de 10 dígitos'},
+                        {id: 'inputEmail', mensaje: 'El email debe tener la forma <nombre>@<dominio>'},
+                        {id: 'inputTipo', mensaje: 'Debe seleccionar un tipo de integrante válido'}
+                    ];
+
+                    for (let campo of campos) {
+                        let elemento = document.getElementById(campo.id);
+                        if (elemento) {
+                            let valor = elemento.value.trim();
+                            if (valor === '' || /^\s+$/.test(elemento.value)) {
+                                e.preventDefault();
+                                alert(campo.mensaje);
+                                elemento.focus();
+                                return false;
+                            }
+                            if (campo.soloTexto && /[0-9]/.test(valor)) {
+                                e.preventDefault();
+                                alert(campo.mensaje);
+                                elemento.focus();
+                                return false;
+                            }
+                            if (campo.id === 'inputTipo' && (elemento.value === '' || isNaN(elemento.value) || parseInt(elemento.value) < 1)) {
+                                e.preventDefault();
+                                alert(campo.mensaje);
+                                elemento.focus();
+                                return false;
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

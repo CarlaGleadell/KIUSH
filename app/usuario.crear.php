@@ -63,5 +63,14 @@ $Roles = new ColeccionRoles();
             </form>
         </div>
         <?php include_once '../gui/footer.php'; ?>
+        <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            var nombre = document.getElementById('inputNombre').value.trim();
+            if (/\d/.test(nombre)) {
+                alert('El nombre debe ser un nombre real, como figura en el DNI. No puede contener números.');
+                e.preventDefault();
+            }
+        });
+</script>
     </body>
 </html>

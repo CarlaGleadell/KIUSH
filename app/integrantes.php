@@ -25,15 +25,7 @@ $idCurso = isset($_GET['id']) ? $_GET['id'] : null;
                     <h3>Integrantes</h3>
                 </div>
                 <div class="card-body">
-                <p>
-                    <a href="integrante.crear.php">
-                        <button type="button" class="btn btn-success">
-                            <span class="oi oi-plus"></span> Nuevo Integrante
-                        </button>
-                    </a>
-                </p>
-                
-                
+                                
                 <form class="d-flex"  action="integrante.buscar.php" method="get">
                     <input name="busquedaIntegrante" class="form-control me-2 flex-grow-1" type="search" placeholder="Buscar integrante" aria-label="Buscar">
                     <button class="btn btn-outline-success" type="submit">Buscar</button>

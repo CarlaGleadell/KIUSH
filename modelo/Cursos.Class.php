@@ -15,6 +15,19 @@ class Curso extends BDObjetoGenerico {
     protected $usuario_id;
     protected $imagen;
 
+    public function getIntegrantes() {
+        $query = "SELECT ci.*, i.nombre, i.apellido, i.email 
+                  FROM curso_integrante ci 
+                  JOIN integrante i ON ci.integrante_id = i.id 
+                  WHERE ci.curso_id = '{$this->id}'";
+        $result = BDConexion::getInstancia()->query($query);
+        $integrantes = [];
+        while ($row = $result->fetch_assoc()) {
+            $integrantes[] = $row;
+        }
+        return $integrantes;
+    }
+
    
     function __construct($id = NULL) {
         parent::__construct($id, "Curso");

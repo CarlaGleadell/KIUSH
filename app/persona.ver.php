@@ -2,8 +2,23 @@
 include_once '../lib/ControlAcceso.Class.php';
 ControlAcceso::requierePermiso(PermisosSistema::PERMISO_PREINSCRIPTOS);
 include_once '../modelo/Persona.Class.php';
+include_once '../modelo/BDConexion.Class.php';
 
 $Persona = new Persona($_GET["id"]);
+$idPersona = $Persona->getId();
+
+// Obtener cursos a los que se inscribió esta persona con info extra
+$queryCursos = "SELECT c.id, c.nombre, cp.estado, cp.pago, cp.nota, cp.asistencia
+                FROM curso_persona cp 
+                JOIN curso c ON cp.curso_id = c.id 
+                WHERE cp.persona_id = {$idPersona}";
+$resultCursos = BDConexion::getInstancia()->query($queryCursos);
+$cursosInscripto = [];
+if ($resultCursos && $resultCursos->num_rows > 0) {
+    while ($row = $resultCursos->fetch_assoc()) {
+        $cursosInscripto[] = $row;
+    }
+}
 ?>
 <html>
     <head>
@@ -20,8 +35,7 @@ $Persona = new Persona($_GET["id"]);
             <p></p>
             <div class="card">
                 <div class="card-header">
-                    <h3>Datos de Preinscriptos
-                    </h3>
+                    <h3>Datos de Preinscriptos</h3>
                 </div>
                 <div class="card-body">
                     <h4 class="card-text">Nombres</h4>
@@ -36,25 +50,7 @@ $Persona = new Persona($_GET["id"]);
                     <h4 class="card-text">DNI</h4>
                         <p> <?= $Persona->getDni(); ?></p>
                     <hr />
-                    <?php
-                    $estado = "Preinscripto";
-                    if($Persona->getEstado() > 0){
-                        $estado = "Inscripto";
-                    }
-                    ?>
-                    <h4 class="card-text">Estado</h4>
-                        <p> <?= $estado ?></p>
-                    <hr />
-                    <?php
-                    $pago = "No pagó";
-                    if($Persona->getPago() > 0){
-                        $pago = "Si pagó";
-                    }
-                    ?>
-                    <h4 class="card-text">Pago</h4>
-                        <p> <?= $pago ?></p>
-                    <hr />
-
+              
                     <?php
                     $tipo = $Persona->getTipo_id();
                     $tipoNombre = '';
@@ -153,12 +149,73 @@ $Persona = new Persona($_GET["id"]);
                     <h4 class="card-text">Carrera</h4>
                         <p> <?= $carreraNombre; ?></p>
                     <hr />
-                   
-                   
                     
-                    <a href="personas.php">
+                    <!-- Botón para ver cursos inscriptos -->
+                    <a href="#" data-toggle="modal" data-target="#modalCursosInscripto">
                         <button type="button" class="btn btn-primary">
-                            <span class="oi oi-account-logout"></span> Atras
+                            <span class="oi oi-list"></span> Ver cursos a los que se inscribió
+                        </button>
+                    </a>
+                    
+                    <!-- Modal con listado de cursos -->
+                    <div class="modal fade" id="modalCursosInscripto" tabindex="-1" role="dialog" aria-labelledby="modalCursosInscriptoLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="modalCursosInscriptoLabel">Cursos a los que se inscribió</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <?php if (count($cursosInscripto) > 0) { ?>
+                                <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Curso</th>
+                                            <th>Estado</th>
+                                            <th>Nota</th>
+                                            <th>Asistencia</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach ($cursosInscripto as $curso) { 
+                                        // Estado
+                                        $estadoTxt = ($curso['estado'] > 0) ? 'Inscripto' : 'Preinscripto';
+                                        ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($curso['nombre']) ?></td>
+                                            <td><?= $estadoTxt ?></td>
+                                            <td><?= htmlspecialchars($curso['nota']) ?></td>
+                                            <td><?= htmlspecialchars($curso['asistencia']) ?></td>
+                                            <td>
+                                                <a href="curso.ver.php?id=<?= $curso['id'] ?>" class="btn btn-outline-primary btn-sm">
+                                                    <span class="oi oi-zoom-in"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                    </tbody>
+                                </table>
+                                </div>
+                            <?php } else { ?>
+                                <div class="alert alert-info text-center mb-0">
+                                    No se inscribió a ningún curso.
+                                </div>
+                            <?php } ?>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <a href="personas.gestionar.php">
+                        <button type="button" class="btn btn-primary">
+                            <span class="oi oi-account-logout"></span> Atrás
                         </button>
                     </a>
                 </div>

@@ -6,11 +6,7 @@ include_once '../modelo/Cursos.Class.php';
 $controlAcceso = new ControlAcceso();
 $Personas = new ColeccionPersonas();
 $idCurso = isset($_GET['id']) ? $_GET['id'] : null;
-if (!$idCurso) {
-    header("Location: curso.inscribirse.php");
-    exit;
-}
-$curso = new Curso($idCurso);
+$curso = $idCurso ? new Curso($idCurso) : null;
 ?>
 <html>
     <head>
@@ -20,7 +16,6 @@ $curso = new Curso($idCurso);
         <script type="text/javascript" src="../lib/JQuery/jquery-3.3.1.js"></script>
         <script type="text/javascript" src="../lib/bootstrap-4.1.1-dist/js/bootstrap.min.js"></script>
         <title><?php echo Constantes::NOMBRE_SISTEMA; ?> - Inscripción a Curso</title>
-     
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 function manejarCampoCarrera() {
@@ -37,7 +32,6 @@ $curso = new Curso($idCurso);
                         campoCarrera.removeAttribute('required');
                     }
                 }
-                
                 document.getElementById('inputTipo').addEventListener('change', manejarCampoCarrera);
                 manejarCampoCarrera();
             });
@@ -55,8 +49,10 @@ $curso = new Curso($idCurso);
             <form action="persona.crear.procesar.php" method="post">
                 <div class="card">
                     <div class="card-header">
-                        <h3>Formulario de Inscripción</h3>
-                        <p>Complete todos los campos requeridos y presione "Confirmar" para inscribirse al curso.</p>
+                        <h3><?= $idCurso ? 'Formulario de Inscripción' : 'Alta de Persona' ?></h3>
+                        <p>
+                            <?= $idCurso ? 'Complete todos los campos requeridos y presione "Confirmar" para inscribirse al curso.' : 'Complete los datos personales y presione "Confirmar" para dar de alta la persona.' ?>
+                        </p>
                     </div>
                     <div class="card-body">
                         <h4>Datos</h4>
@@ -64,14 +60,14 @@ $curso = new Curso($idCurso);
                             <label for="inputNombre">Nombre</label>
                             <input type="text" name="nombre" class="form-control" id="inputNombre" placeholder="Ingrese nombre/s" required="">
                             <label for="inputApellido">Apellido</label>
-                            <input type="texte" name="apellido" class="form-control" id="inputApellido" placeholder="Ingrese apellido/s" required="">
+                            <input type="text" name="apellido" class="form-control" id="inputApellido" placeholder="Ingrese apellido/s" required="">
                             <label for="inputEmail">Email</label>
                             <input type="email" name="email" class="form-control" id="inputEmail" placeholder="Ingrese correo electronico" required="">
                             <label for="inputDNI">DNI</label>
                             <input type="text" name="dni" class="form-control" id="inputDNI" placeholder="Ingrese DNI" pattern="\d{8}" required="">
                             <label for="inputTipo">Tipo</label>
                             <select name="tipo" class="form-control" id="inputTipo" required="">
-                                <option value="">Seleccione su condicion</option>
+                                <option value="">Seleccione su condición</option>
                                 <option value="1">Estudiante de la UNPA-UARG</option>
                                 <option value="2">Docente de la UNPA-UARG</option>
                                 <option value="3">No docente de la UNPA-UARG</option>
@@ -105,16 +101,17 @@ $curso = new Curso($idCurso);
                                     <option value="918">Licenciatura en Comunicación Social</option>
                                 </select>
                             </div>
+                            <?php if ($idCurso && !$controlAcceso->esVisitante()) { ?>
                             <div class="form-check mt-3">
-                                <?php if (!$controlAcceso->esVisitante()) {?>
                                 <input name="estado" class="form-check-input" type="checkbox" value="1" id="flexCheckDefault">    
                                 <label class="form-check-label" for="flexCheckDefault">
                                     Aceptado como inscripto
                                 </label>
-                                <?php
-                                    } ?>
                             </div>
-                            <input type="hidden" name="idCurso" value="<?= $idCurso; ?>">
+                            <?php } ?>
+                            <?php if ($idCurso): ?>
+                                <input type="hidden" name="idCurso" value="<?= $idCurso; ?>">
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -125,7 +122,7 @@ $curso = new Curso($idCurso);
                         if ($controlAcceso->esVisitante()) { ?>
                             <a href="curso.inscribirse.php" class="btn btn-outline-danger">
                         <?php } else { ?>
-                            <a href="index_2.php" class="btn btn-outline-danger">
+                            <a href="personas.gestionar.php" class="btn btn-outline-danger">
                         <?php } ?>
                             <span class="oi oi-x"></span> Cancelar
                         </a>

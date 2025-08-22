@@ -16,14 +16,15 @@ class ColeccionIntegrantes extends BDColeccionGenerica {
         return $this->integrantes;
     }
 
-    function getIntegrantesPorCurso($idCurso) {
-        $this->query = "SELECT integrante.* FROM integrante 
-                        JOIN curso_integrante ON integrante.id = curso_integrante.integrante_id
-                        WHERE curso_integrante.curso_id = {$idCurso}";
-        $this->datos = BDConexion::getInstancia()->query($this->query);
-        $integrantes = array();
-        while ($fila = $this->datos->fetch_object('Integrante')) {
-            $integrantes[] = $fila;
+    public function getIntegrantesPorCurso($idCurso) {
+        $query = "SELECT ci.*, i.nombres, i.apellidos, i.email 
+              FROM curso_integrante ci 
+              JOIN integrante i ON ci.integrante_id = i.id 
+              WHERE ci.curso_id = '{$idCurso}'";
+        $result = BDConexion::getInstancia()->query($query);
+        $integrantes = [];
+        while ($row = $result->fetch_assoc()) {
+            $integrantes[] = $row;
         }
         return $integrantes;
     }

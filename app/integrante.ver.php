@@ -20,8 +20,7 @@ $Integrante = new Integrante($_GET["id"]);
             <p></p>
             <div class="card">
                 <div class="card-header">
-                    <h3>Datos de Integrantes
-                    </h3>
+                    <h3>Datos de Integrante</h3>
                 </div>
                 <div class="card-body">
                     <h4 class="card-text">Nombres</h4>
@@ -36,18 +35,6 @@ $Integrante = new Integrante($_GET["id"]);
                     <h4 class="card-text">Titulo</h4>
                         <p> <?= $Integrante->getTitulo(); ?></p>
                     <hr />
-                    <h4 class="card-text">Instituto</h4>
-                        <p> <?= $Integrante->getInstituto(); ?></p>
-                    <hr />
-                    <h4 class="card-text">Categoría docente</h4>
-                        <p> <?= $Integrante->getCategoriaDocente(); ?></p>
-                    <hr />
-                    <h4 class="card-text">Dedicación</h4>
-                        <p> <?= $Integrante->getDedicacion(); ?></p>
-                    <hr />
-                    <h4 class="card-text">Categoría extensionista</h4>
-                        <p> <?= $Integrante->getCategoriaExtensionista(); ?></p>
-                    <hr />
                     <h4 class="card-text">Dirección</h4>
                         <p> <?= $Integrante->getDireccion(); ?></p>
                     <hr />
@@ -57,31 +44,9 @@ $Integrante = new Integrante($_GET["id"]);
                     <h4 class="card-text">Teléfono</h4>
                         <p> <?= $Integrante->getTelefono(); ?></p>
                     <hr />
-                    <h4 class="card-text">Rol</h4>
-                        <p> <?= $Integrante->getRol(); ?></p>
-                    <hr />
                     <h4 class="card-text">Email</h4>
                         <p> <?= $Integrante->getEmail(); ?></p>
                     <hr />
-                    <h4 class="card-text">Organización</h4>
-                        <p> <?= $Integrante->getOrganizacion(); ?></p>
-                    <hr />
-                    <h4 class="card-text">Función</h4>
-                        <p> <?= $Integrante->getFuncion(); ?></p>
-                    <hr />
-                    <h4 class="card-text">Nivel de estudios</h4>
-                        <p> <?= $Integrante->getNivelEstudios(); ?></p>
-                    <hr />
-                    <h4 class="card-text">Ocupación</h4>
-                        <p> <?= $Integrante->getOcupacion(); ?></p>
-                    <hr />
-                    <h4 class="card-text">Afección de horas semanales a la actividad</h4>
-                        <p> <?= $Integrante->getAfeccionHorasSemanales(); ?></p>
-                    <hr />
-                    <h4 class="card-text">Afección total de horas a la actividad</h4>
-                        <p> <?= $Integrante->getAfeccionTotalHoras(); ?></p>
-                    <hr />                    
-                    
                     <?php
                     $tipo = $Integrante->getTipo_id();
                     $tipoNombre = '';
@@ -98,16 +63,14 @@ $Integrante = new Integrante($_GET["id"]);
                         case 4:
                             $tipoNombre = 'Externo a la UNPA-UARG';
                             break;
-                        case 4:
+                        case 5:
                             $tipoNombre = 'Graduado/a/e de la UNPA-UARG';
                             break;
                     }
                     ?>  
-                    
                     <h4 class="card-text">Tipo</h4>
                         <p> <?= $tipoNombre; ?></p>
                     <hr />
-                    
                     <?php
                     $carrera = $Integrante->getCarrera_Cod();
                     $carreraNombre = '';
@@ -177,15 +140,13 @@ $Integrante = new Integrante($_GET["id"]);
                             break;
                     }
                     ?>  
-
                     <h4 class="card-text">Carrera</h4>
                         <p> <?= $carreraNombre; ?></p>
                     <hr />
-                   
                     <h5 class="card-text">Opciones</h5>
                     <a href="integrantes.gestionar.php">
                         <button type="button" class="btn btn-primary">
-                            <span class="oi oi-account-logout"></span> Atras
+                            <span class="oi oi-account-logout"></span> Atrás
                         </button>
                     </a>
                 </div>

@@ -116,7 +116,7 @@ $carrera = $Persona->getCarrera_Cod();
                         <button type="submit" class="btn btn-outline-success">
                             <span class="oi oi-check"></span> Confirmar
                         </button>
-                        <a href="personas.php">
+                        <a href="personas.gestionar.php">
                             <button type="button" class="btn btn-outline-danger">
                                 <span class="oi oi-x"></span> Cancelar
                             </button>

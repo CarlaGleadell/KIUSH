@@ -33,7 +33,7 @@ $Curso = new Curso($id);
                         <button type="submit" class="btn btn-outline-success">
                             <span class="oi oi-check"></span> Sí, deseo eliminar
                         </button>
-                        <a href="usuarios.php">
+                        <a href="cursos.php">
                             <button type="button" class="btn btn-outline-danger">
                                 <span class="oi oi-x"></span> NO (Salir de esta pantalla)
                             </button>

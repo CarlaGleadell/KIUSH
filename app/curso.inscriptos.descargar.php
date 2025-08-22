@@ -13,6 +13,30 @@ $Curso = new Curso($idCurso);
 $ColeccionPersonas = new ColeccionPersonas();
 $personasDelCurso = $ColeccionPersonas->getPersonasPorCurso($idCurso);
 
+// Verificar si hay inscriptos
+if (empty($personasDelCurso)) {
+    ?>
+    <html>
+        <head>
+            <meta charset="UTF-8">
+            <link rel="stylesheet" href="../lib/bootstrap-4.1.1-dist/css/bootstrap.css" />
+            <title>No hay inscriptos</title>
+        </head>
+        <body>
+            <div class="container mt-5">
+                <div class="alert alert-info text-center">
+                    <h4>No hay inscriptos a este curso</h4>
+                </div>
+                <div class="text-center">
+                    <a href="curso.ver.php?id=<?= $idCurso ?>" class="btn btn-primary">Volver al curso</a>
+                </div>
+            </div>
+        </body>
+    </html>
+    <?php
+    exit;
+}
+
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 

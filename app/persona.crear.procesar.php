@@ -4,34 +4,26 @@ include_once '../lib/ControlAcceso.Class.php';
 include_once '../modelo/BDConexion.Class.php';
 include_once '../modelo/Cursos.Class.php';
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 require_once 'C:/xampp/htdocs/KIUSH/vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$DatosFormulario = $_POST;
-$idCurso = isset($_POST['idCurso']) ? $_POST['idCurso'] : null;
-$curso = new Curso($idCurso);
 $controlAcceso = new ControlAcceso();
-BDConexion::getInstancia()->autocommit(false);
-BDConexion::getInstancia()->begin_transaction();
-
-$estado = 0;
-if (isset($_POST['estado'])) {
-    $estado = $_POST['estado'];
-}
+$Datos = $_POST;
+$idCurso = isset($Datos['idCurso']) ? $Datos['idCurso'] : null;
+$success = false;
+$error_message = '';
 
 try {
-    $dni = $DatosFormulario["dni"];
-    $nombre = $DatosFormulario["nombre"];
-    $apellido = $DatosFormulario["apellido"];
-    $email = $DatosFormulario["email"];
-    $tipo_id = intval($DatosFormulario["tipo"]);
-    $carrera_Cod = !empty($DatosFormulario["carrera"]) ? sprintf("%03d", intval($DatosFormulario["carrera"])) : null;
+    $dni = $Datos["dni"];
+    $nombre = $Datos["nombre"];
+    $apellido = $Datos["apellido"];
+    $email = $Datos["email"];
+    $tipo_id = intval($Datos["tipo"]);
+    $carrera_Cod = !empty($Datos["carrera"]) ? sprintf("%03d", intval($Datos["carrera"])) : null;
 
+    // Verificar si el DNI ya existe
     $checkQuery = "SELECT id FROM persona WHERE dni = ?";
     $stmt = BDConexion::getInstancia()->prepare($checkQuery);
     $stmt->bind_param("s", $dni);
@@ -39,106 +31,115 @@ try {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // Si la persona ya existe, solo se actualizar
+        // Actualizar datos
         $row = $result->fetch_assoc();
         $idPersona = $row['id'];
-
         $updateQuery = "UPDATE persona SET nombre = ?, apellido = ?, email = ?, tipo_id = ?, carrera_Cod = ? WHERE id = ?";
-        $stmt = BDConexion::getInstancia()->prepare($updateQuery);
-        $stmt->bind_param("sssisi", $nombre, $apellido, $email, $tipo_id, $carrera_Cod, $idPersona);
-        $stmt->execute();
+        $stmtUpdate = BDConexion::getInstancia()->prepare($updateQuery);
+        $stmtUpdate->bind_param("sssisi", $nombre, $apellido, $email, $tipo_id, $carrera_Cod, $idPersona);
+        $stmtUpdate->execute();
     } else {
-        // Si la persona no existe, se crea una nueva
+        // Crear persona
         $insertQuery = "INSERT INTO persona (nombre, apellido, email, dni, tipo_id, carrera_Cod) VALUES (?, ?, ?, ?, ?, ?)";
-        $stmt = BDConexion::getInstancia()->prepare($insertQuery);
-        $stmt->bind_param("ssssii", $nombre, $apellido, $email, $dni, $tipo_id, $carrera_Cod);
-        $stmt->execute();
+        $stmtInsert = BDConexion::getInstancia()->prepare($insertQuery);
+        $stmtInsert->bind_param("ssssii", $nombre, $apellido, $email, $dni, $tipo_id, $carrera_Cod);
+        $stmtInsert->execute();
         $idPersona = BDConexion::getInstancia()->insert_id;
     }
 
+    // Si hay idCurso, asociar a curso_persona y enviar email
+    if (!empty($idCurso)) {
+        $curso = new Curso($idCurso);
+        $estado = (isset($Datos["estado"]) && $Datos["estado"] == "1") ? 'Inscripto' : 'Preinscripto';
 
-    $mail = new PHPMailer(true);
+        // Verificar si ya está inscripto a ese curso
+        $queryCheckCurso = "SELECT * FROM curso_persona WHERE curso_id = ? AND persona_id = ?";
+        $stmtCheckCurso = BDConexion::getInstancia()->prepare($queryCheckCurso);
+        $stmtCheckCurso->bind_param("ii", $idCurso, $idPersona);
+        $stmtCheckCurso->execute();
+        $resultCheckCurso = $stmtCheckCurso->get_result();
 
-    try {
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = 'cursoskiushunpa@gmail.com'; 
-        $mail->Password = 'gpfn hvyr ykhu cmhe';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587;
-        
-        $mail->CharSet = 'UTF-8';
-        $mail->Encoding = 'base64';
+        if ($resultCheckCurso->num_rows == 0) {
+            $queryCursoPersona = "INSERT INTO curso_persona (curso_id, persona_id, estado) VALUES (?, ?, ?)";
+            $stmtCursoPersona = BDConexion::getInstancia()->prepare($queryCursoPersona);
+            $stmtCursoPersona->bind_param("iis", $idCurso, $idPersona, $estado);
+            $stmtCursoPersona->execute();
+        }
 
-        $mail->setFrom(Constantes::EMAIL_SISTEMA);
-        $mail->addAddress($DatosFormulario["email"]);
+        // Enviar email de confirmación
+        $mail = new PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'cursoskiushunpa@gmail.com';
+            $mail->Password = 'gpfn hvyr ykhu cmhe';
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+            $mail->CharSet = 'UTF-8';
+            $mail->Encoding = 'base64';
 
-        $mail->isHTML(true);
-        $mail->Subject = "Inscripción a Curso - " . Constantes::NOMBRE_SISTEMA;
-        
-        $messageHTML = "
-        <html>
-        <head>
-            <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; }
-                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                .header { font-weight: bold; margin-bottom: 20px; }
-                .footer { margin-top: 30px; font-size: 12px; color: #777; }
-                .curso-info { margin: 20px 0; }
-                .curso-info p { margin: 5px 0; }
-            </style>
-        </head>
-        <body>
-            <div class='container'>
-                <div class='header'>
-                    Estimado/a {$DatosFormulario["nombre"]} {$DatosFormulario["apellido"]},
+            $mail->setFrom(Constantes::EMAIL_SISTEMA);
+            $mail->addAddress($email);
+
+            $mail->isHTML(true);
+            $mail->Subject = "Inscripción a Curso - " . Constantes::NOMBRE_SISTEMA;
+
+            $messageHTML = "
+            <html>
+            <head>
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .header { font-weight: bold; margin-bottom: 20px; }
+                    .footer { margin-top: 30px; font-size: 12px; color: #777; }
+                    .curso-info { margin: 20px 0; }
+                    .curso-info p { margin: 5px 0; }
+                </style>
+            </head>
+            <body>
+                <div class='container'>
+                    <div class='header'>
+                        Estimado/a {$nombre} {$apellido},
+                    </div>
+                    <p>Se ha registrado su inscripción al curso \"{$curso->getNombre()}\".</p>
+                    <div class='curso-info'>
+                        <p><strong>Fechas de dictado:</strong> {$curso->getFechasDictado()}</p>
+                        <p><strong>Lugar:</strong> {$curso->getLugar()}</p>
+                    </div>
+                    <p>¡Gracias por su participación!</p>
+                    <div class='footer'>
+                        UNPA - UARG<br>
+                        " . Constantes::NOMBRE_SISTEMA . "
+                    </div>
                 </div>
-                
-                <p>Se ha registrado su inscripción al curso \"{$curso->getNombre()}\".</p>
-                
-                <div class='curso-info'>
-                    <p><strong>Fechas de dictado:</strong> {$curso->getFechasDictado()}</p>
-                    <p><strong>Lugar:</strong> {$curso->getLugar()}</p>
-                </div>
-                
-                <p>¡Gracias por su participación!</p>
-                
-                <div class='footer'>
-                    UNPA - UARG<br>
-                    " . Constantes::NOMBRE_SISTEMA . "
-                </div>
-            </div>
-        </body>
-        </html>";
-        
-        $messageText = "Estimado/a {$DatosFormulario["nombre"]} {$DatosFormulario["apellido"]},\n\n";
-        $messageText .= "Se ha registrado su inscripción al curso \"{$curso->getNombre()}\".\n";
-        $messageText .= "Fechas de dictado: {$curso->getFechasDictado()}\n";
-        $messageText .= "Lugar: {$curso->getLugar()}\n\n";
-        $messageText .= "¡Gracias por su participación!\n";
-        $messageText .= "UNPA - UARG\n";
-        $messageText .= Constantes::NOMBRE_SISTEMA;
-        
-        $mail->Body = $messageHTML;
-        $mail->AltBody = $messageText;
+            </body>
+            </html>";
 
-        $mail->send();
-        BDConexion::getInstancia()->commit();
+            $messageText = "Estimado/a {$nombre} {$apellido},\n\n";
+            $messageText .= "Se ha registrado su inscripción al curso \"{$curso->getNombre()}\".\n";
+            $messageText .= "Fechas de dictado: {$curso->getFechasDictado()}\n";
+            $messageText .= "Lugar: {$curso->getLugar()}\n\n";
+            $messageText .= "¡Gracias por su participación!\n";
+            $messageText .= "UNPA - UARG\n";
+            $messageText .= Constantes::NOMBRE_SISTEMA;
+
+            $mail->Body = $messageHTML;
+            $mail->AltBody = $messageText;
+
+            $mail->send();
+            $success = true;
+        } catch (Exception $e) {
+            $success = false;
+            $error_message = "No se pudo enviar el correo. Error: {$mail->ErrorInfo}";
+        }
+    } else {
         $success = true;
-    } catch (Exception $e) {
-        BDConexion::getInstancia()->rollback();
-        $success = false;
-        $error_message = "No se pudo enviar el correo. Error: {$mail->ErrorInfo}";
     }
 } catch (Exception $e) {
-    BDConexion::getInstancia()->rollback();
     $success = false;
     $error_message = $e->getMessage();
 }
-
-BDConexion::getInstancia()->commit();
-BDConexion::getInstancia()->autocommit(true);
 ?>
 <html>
     <head>
@@ -149,21 +150,10 @@ BDConexion::getInstancia()->autocommit(true);
         <script type="text/javascript" src="../lib/bootstrap-4.1.1-dist/js/bootstrap.min.js"></script>
         <title><?php echo Constantes::NOMBRE_SISTEMA; ?> - Agregar Preinscripto</title>
         <style>
-            html, body {
-                height: 100%;
-            }
-            body {
-                display: flex;
-                flex-direction: column;
-            }
-            .content-container {
-                flex: 1 0 auto;
-                padding-bottom: 20px;
-            }
-            footer {
-                flex-shrink: 0;
-                width: 100%;
-            }
+            html, body { height: 100%; }
+            body { display: flex; flex-direction: column; }
+            .content-container { flex: 1 0 auto; padding-bottom: 20px; }
+            footer { flex-shrink: 0; width: 100%; }
         </style>
     </head>
     <body>
@@ -176,7 +166,7 @@ BDConexion::getInstancia()->autocommit(true);
         ?>
         <div class="content-container container">
             <p></p>
-            <div class="card">
+            <div class="card mt-4">
                 <div class="card-header">
                     <h3>Estado de la Inscripción</h3>
                 </div>
@@ -184,8 +174,10 @@ BDConexion::getInstancia()->autocommit(true);
                     <?php if ($success) { ?>
                         <div class="alert alert-success" role="alert">
                             <h4 class="alert-heading">¡Inscripción Exitosa!</h4>
-                            <p>Su inscripción al curso ha sido registrada correctamente.</p>
-                            <p>Se ha enviado un correo de confirmación a: <?php echo htmlspecialchars($DatosFormulario["email"]); ?></p>
+                            <p>Su inscripción ha sido registrada correctamente.</p>
+                            <?php if (!empty($idCurso)) { ?>
+                                <p>Se ha enviado un correo de confirmación a: <?php echo htmlspecialchars($email); ?></p>
+                            <?php } ?>
                         </div>
                     <?php } else { ?>
                         <div class="alert alert-danger" role="alert">
@@ -198,15 +190,15 @@ BDConexion::getInstancia()->autocommit(true);
                     <?php } ?>
                     <hr />
                     <h5 class="card-text">Opciones</h5>
-                    <?php if ($controlAcceso->esVisitante()): ?> 
+                    <?php if ($controlAcceso->esVisitante()) { ?> 
                         <a href="curso.inscribirse.php" class="btn btn-primary">
                             <span class="oi oi-account-logout"></span> Volver a Cursos
                         </a>
-                    <?php else: ?>
+                    <?php } else { ?>
                         <a href="personas.gestionar.php" class="btn btn-primary">
                             <span class="oi oi-account-logout"></span> Atrás
                         </a>
-                    <?php endif; ?>
+                    <?php } ?>
                 </div>
             </div>
         </div>
