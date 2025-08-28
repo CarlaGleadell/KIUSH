@@ -1,7 +1,7 @@
 <?php
 include_once '../lib/ControlAcceso.Class.php';
 include_once '../lib/Constantes.Class.php';
-ControlAcceso::requierePermiso(PermisosSistema::PERMISO_INTEGRANTES);
+ControlAcceso::requierePermiso(PermisosSistema::PERMISO_PREINSCRIPTOS);
 include_once '../modelo/BDConexion.Class.php';
 
 $DatosFormulario = $_POST;
@@ -48,11 +48,9 @@ if (!$yaInscripto) {
 
     if (!$success) {
         BDConexion::getInstancia()->rollback();
-        die(BDConexion::getInstancia()->errno);
+    } else {
+        BDConexion::getInstancia()->commit();
     }
-
-    BDConexion::getInstancia()->commit();
-    BDConexion::getInstancia()->autocommit(true);
 }
 ?>
 <html>
@@ -70,16 +68,16 @@ if (!$yaInscripto) {
             <p></p>
             <div class="card">
                 <div class="card-header">
-                    <h3>Agregar preinscripto a curso</h3>
+                    <h3>Agregar preinscripto</h3>
                 </div>
                 <div class="card-body">
                     <?php if ($yaInscripto) { ?>
                         <div class="alert alert-warning" role="alert">
-                            <?php echo htmlspecialchars($nombrePersona) ?> ya se encuentra preinscripto/a al curso <?php echo htmlspecialchars($nombreCurso) ?>.
+                            La persona ya se encontraba preinscripta al curso.
                         </div>
                     <?php } else if ($success) { ?>
                         <div class="alert alert-success" role="alert">
-                            Operaci&oacute;n realizada con &eacute;xito.
+                            Operación realizada con éxito.
                         </div>
                     <?php } else { ?>
                         <div class="alert alert-danger" role="alert">
@@ -88,7 +86,7 @@ if (!$yaInscripto) {
                     <?php } ?>
                     <hr />
                     <h5 class="card-text">Opciones</h5>
-                    <a href="personas.php?id=<?= $idCurso;?>">
+                    <a href="personas.php?id_curso=<?= $idCurso;?>">
                         <button type="button" class="btn btn-primary">
                             <span class="oi oi-account-logout"></span> Atrás
                         </button>

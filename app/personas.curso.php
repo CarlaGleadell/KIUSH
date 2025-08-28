@@ -69,7 +69,7 @@ $personasDelCurso = $ColeccionPersonas->getPersonasPorCurso($idCurso);
                     <?php } }?>
                 </table>
                 <div style="display: flex; justify-content: center;">
-                    <a href="personas.php?id=<?= $idCurso; ?>">
+                    <a href="personas.php?id_curso=<?= $idCurso; ?>">
                         <button type="button" class="btn btn-primary">
                             <span class="oi oi-plus"></span> Agregar preinscriptos
                         </button>
