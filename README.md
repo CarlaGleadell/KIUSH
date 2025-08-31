@@ -15,7 +15,7 @@ Su objetivo es digitalizar la inscripción, administración de cursos y exportac
 - 📚 [Repositorio de Documentación](https://github.com/CarlaGleadell/KIUSHDocumentacion) 
 - 💻 [Repositorio de Código](https://github.com/CarlaGleadell/KIUSH)
 - 📺 [Video de muestra del sistema](https://vimeo.com/1114576529?h=1114576529)
-- 🎞️ [Presentación - etapa transición]([https://view.genially.com/68af787ea3cd32b1dc7c51e1/presentation-transicion-1-laboratorio-de-desarrollo-de-software](https://view.genially.com/68af787ea3cd32b1dc7c51e1/presentation-transicion-1-laboratorio-de-desarrollo-de-software))
+- 🎞️ [Presentación - etapa transición](https://view.genially.com/68af787ea3cd32b1dc7c51e1/presentation-transicion-1-laboratorio-de-desarrollo-de-software)
 
 ---
 
