@@ -14,6 +14,7 @@ Su objetivo es digitalizar la inscripción, administración de cursos y exportac
 
 - 📚 [Repositorio de Documentación](https://github.com/CarlaGleadell/KIUSHDocumentacion) 
 - 💻 [Repositorio de Código](https://github.com/CarlaGleadell/KIUSH)
+- 📺 [Video de muestra del sistema](https://vimeo.com/1114576529?h=1114576529)
 
 ---
 
