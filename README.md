@@ -156,7 +156,6 @@ Contiene toda la lógica de la aplicación web, organizados en módulos funciona
 - **Personas**: Gestión de datos de personas en el sistema
 - **Roles**: Administración de roles de usuario
 - **Usuarios**: Gestión completa de usuarios del sistema
-- **GUI**: Componentes de interfaz (navbars y footers)
 
 ### 📂 gui/
 Componentes de interfaz (navbars y footers)
